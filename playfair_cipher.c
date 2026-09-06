@@ -1,106 +1,75 @@
-#include<stdio.h>
-#include<string.h>
-#include<ctype.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 
-char matrix[5][5];
+char mat[5][5];
 
-int isValid(char text[]) {
-    for(int i=0; text[i]; i++) {
-        if(!isalpha(text[i]))
-            return 0;
-    }
-    return 1;
-}
-
-void generateMatrix(char key[]) {
-    int used[26] = {0};
+void create(char key[]) {
+    int used[26] = {0}, r = 0, c = 0, i;
+    char ch;
     used['J'-'A'] = 1;
-    char temp[25];
-    int k = 0;
-    for(int i=0; key[i]; i++) {
-        char ch = toupper(key[i]);
-        if(ch == 'J')
-            ch = 'I';
-        if(!used[ch-'A']) {
+    for(i = 0; key[i]; i++) {
+        ch = toupper(key[i]);
+        if(ch == 'J') ch = 'I';
+        if(ch >= 'A' && ch <= 'Z' && !used[ch-'A']) {
+            mat[r][c++] = ch;
             used[ch-'A'] = 1;
-            temp[k++] = ch;
+            if(c == 5) c=0, r++;
         }
     }
-    for(char ch='A'; ch<='Z'; ch++) {
+    for(ch='A'; ch<='Z'; ch++) {
         if(!used[ch-'A']) {
+            mat[r][c++] = ch;
             used[ch-'A'] = 1;
-            temp[k++] = ch;
+            if(c == 5) c=0, r++;
         }
     }
-    k = 0;
-    for(int i=0; i<5; i++)
-        for(int j=0; j<5; j++)
-            matrix[i][j] = temp[k++];
 }
 
-void findPos(char ch,int *r,int *c) {
-    if(ch == 'J')
-        ch = 'I';
-    for(int i=0; i<5; i++)
-        for(int j=0; j<5; j++)
-            if(matrix[i][j] == ch) {
-                *r = i;
-                *c = j;
-                return;
-            }
+void find(char ch, int *r, int *c) {
+    int i,j;
+    if(ch == 'J') ch = 'I';
+    for(i=0;i<5;i++)
+        for(j=0;j<5;j++)
+            if(mat[i][j] == ch)
+                *r=i, *c=j;
+}
+
+void process(char text[], int decrypt) {
+    int i, r1,c1,r2,c2;
+    char a,b;
+    for(i=0;text[i];i+=2) {
+        a=text[i];
+        b=text[i+1];
+        find(a,&r1,&c1);
+        find(b,&r2,&c2);
+        if(r1 == r2) {
+            c1 = (c1 + (decrypt ? 4 : 1)) % 5;
+            c2 = (c2 + (decrypt ? 4 : 1)) % 5;
+        } else if(c1 == c2) {
+            r1 = (r1 + (decrypt ? 4 : 1)) % 5;
+            r2 = (r2 + (decrypt ? 4 : 1)) % 5;
+        } else {
+            int t=c1;
+            c1=c2;
+            c2=t;
+        }
+        text[i]=mat[r1][c1];
+        text[i+1]=mat[r2][c2];
+    }
 }
 
 int main() {
-    char key[50], text[100];
-    printf("Enter Key: ");
-    fgets(key, sizeof(key), stdin);
-    key[strcspn(key, "\n")] = '\0';
-    printf("Enter Plain Text: ");
-    fgets(text, sizeof(text), stdin);
-    text[strcspn(text, "\n")] = '\0';
-    if(!isValid(key) || !isValid(text)) {
-        printf("Invalid Input");
-        return 0;
-    }
-    for(int i=0; key[i]; i++)
-        key[i] = toupper(key[i]);
-    for(int i=0; text[i]; i++)
-        text[i] = toupper(text[i]);
-    generateMatrix(key);
-    char plain[200];
-    int j = 0;
-    int len = strlen(text);
-    for(int i = 0; i < len; ) {
-        char first = (text[i] == 'J') ? 'I' : text[i];
-        if(i+1 >= len) {
-            plain[j++] = first;
-            plain[j++] = 'X';
-            i++;
-        } else {
-            char second = (text[i+1] == 'J') ? 'I' : text[i+1];
-            plain[j++] = first;
-            if(first == second) {
-                plain[j++] = 'X';
-                i++;
-            } else {
-                plain[j++] = second;
-                i += 2;
-            }
-        }
-    }
-    plain[j] = '\0';
-    printf("Cipher Text: ");
-    for(int i=0; i<j; i+=2) {
-        int r1, c1, r2, c2;
-        findPos(plain[i], &r1, &c1);
-        findPos(plain[i+1], &r2, &c2);
-        if(r1 == r2) {
-            printf("%c%c", matrix[r1][(c1+1)%5], matrix[r2][(c2+1)%5]);
-        } else if(c1 == c2) {
-            printf("%c%c", matrix[(r1+1)%5][c1], matrix[(r2+1)%5][c2]);
-        } else {
-            printf("%c%c", matrix[r1][c2], matrix[r2][c1]);
-        }
-    }
+    char key[50], text[100], enc[100];
+    printf("Enter key: ");
+    scanf("%s", key);
+    printf("Enter even-length text: ");
+    scanf("%s", text);
+    create(key);
+    strcpy(enc,text);
+    process(enc,0);
+    printf("Encrypted: %s\n",enc);
+    process(enc,1);
+    printf("Decrypted: %s\n",enc);
     return 0;
 }
