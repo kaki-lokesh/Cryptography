@@ -13,6 +13,8 @@ A collection of C programs implementing fundamental cryptographic algorithms as 
 | 5 | Monoalphabetic Cipher | Substitution | `monoalphabetic_cipher.c` |
 | 6 | Rail Fence Cipher | Transposition | `rail_fence.c` |
 | 7 | Double Columnar Cipher | Transposition | `double_columnar.c` |
+| 8 | DES Algorithm | ---- | `DES.c` |
+| 9 | DES Algorithm | ---- | `DES.py` |
 
 ## About
 
@@ -32,4 +34,6 @@ Cryptography/
 ├── polyalphabetic_cipher.c
 ├── monoalphabetic_cipher.c
 ├── rail_fence.c
-└── double_columnar.c
+├── double_columnar.c
+├── DES.c
+└── DES.py
