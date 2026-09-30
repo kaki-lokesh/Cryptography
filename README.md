@@ -13,8 +13,10 @@ A collection of C programs implementing fundamental cryptographic algorithms as 
 | 5 | Monoalphabetic Cipher | Substitution | `monoalphabetic_cipher.c` |
 | 6 | Rail Fence Cipher | Transposition | `rail_fence.c` |
 | 7 | Double Columnar Cipher | Transposition | `double_columnar.c` |
-| 8 | DES Algorithm | ---- | `DES.c` |
-| 9 | DES Algorithm | ---- | `DES.py` |
+| 8 | DES Algorithm | Symmetric Block Cipher | `DES.c` |
+| 9 | DES Algorithm | Symmetric Block Cipher | `DES.py` |
+| 10 | AES Algorithm | Symmetric Block Cipher | `AES.c` |
+| 11 | RC4 Algorithm | Symmetric Stream Cipher | `RC4.c` |
 
 ## About
 
@@ -36,4 +38,6 @@ Cryptography/
 ├── rail_fence.c
 ├── double_columnar.c
 ├── DES.c
-└── DES.py
+├── DES.py
+├── AES.c
+└── RC4.c
