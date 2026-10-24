@@ -17,6 +17,7 @@ A collection of C programs implementing fundamental cryptographic algorithms as 
 | 9 | DES Algorithm | Symmetric Block Cipher | `DES.py` |
 | 10 | AES Algorithm | Symmetric Block Cipher | `AES.c` |
 | 11 | RC4 Algorithm | Symmetric Stream Cipher | `RC4.c` |
+| 12 | ElGamal Algorithm | Digital Signature Verification | `ElGamal_DSS.py` |
 
 ## About
 
@@ -40,4 +41,5 @@ Cryptography/
 ├── DES.c
 ├── DES.py
 ├── AES.c
-└── RC4.c
+├── RC4.c
+└── ElGamal_DSS.py
